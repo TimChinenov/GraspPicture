@@ -1,0 +1,21 @@
+//
+// /* Construct superpixel and generate mask*/
+// Ptr<ximgproc::SuperpixelSLIC> ptr =
+//                    ximgproc::createSuperpixelSLIC(BlurImage,100,15, 75.0f);
+//
+// ptr->iterate(10);
+// ptr->enforceLabelConnectivity(10); //reduces small fragments
+// ptr->getLabelContourMask(spxlImg,true);
+//
+// /* Compute the saliency map for the image using OpenCV */
+// Mat salImg1;
+// Mat salImg2;
+// Ptr<Saliency> residual = StaticSaliencySpectralResidual::create();
+// if(!residual->computeSaliency(image,salImg1)){
+//   cout << "error computing sliency" << endl;
+// }
+//
+// Ptr<Saliency> fine = StaticSaliencyFineGrained::create();
+// if(!fine->computeSaliency(image,salImg2)){
+//   cout << "error computing sliency" << endl;
+// }
