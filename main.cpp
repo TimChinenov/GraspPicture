@@ -20,6 +20,7 @@
 #include <math.h>
 #include <float.h>
 #include "grasp.h"
+#include "line.h"
 
 using namespace std;
 using namespace cv;

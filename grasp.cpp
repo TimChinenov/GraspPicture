@@ -39,6 +39,7 @@ Grasp::Grasp(const cv::Mat & binImg)
   cerr << polygon.size() << endl;
 
   //calculate perimeter of contour
+  perimeter = arcLength(polygon,true);
 }
 
 void Grasp::displayPolygon()
@@ -56,5 +57,6 @@ void Grasp::displayPolygon()
 void generateGrasp()
 {
   /* convert each set off coordinates into a line*/
+  
 
 }
