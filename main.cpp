@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
+#include "grasp.h"
 
 using namespace std;
 using namespace cv;
@@ -119,6 +120,10 @@ int main( int argc, char* argv[] ) {
   /* Get contours and keep only the largest one */
   cleanUpBinary(binMask);
 
+  /* Make Grasp Object */
+  Grasp grasp(binMask);
+  grasp.displayPolygon();
+
   /* place super pixel mask on image*/
   Mat spxlMod = image.clone();
   binMask = binMask*255;
@@ -154,14 +159,12 @@ int main( int argc, char* argv[] ) {
       }
   }
 
-  namedWindow("one", WINDOW_NORMAL);
-  imshow("one",image);
   namedWindow("two", WINDOW_NORMAL);
   imshow("two",binMask);
-  namedWindow("three", WINDOW_NORMAL);
-  imshow("three",salImg);
-  namedWindow("five", WINDOW_NORMAL);
-  imshow("five",spxlSal);
+  // namedWindow("three", WINDOW_NORMAL);
+  // imshow("three",salImg);
+  // namedWindow("five", WINDOW_NORMAL);
+  // imshow("five",spxlSal);
   namedWindow("four", WINDOW_NORMAL);
   imshow("four",spxlMod);
 
@@ -208,8 +211,6 @@ void getSaliencyMap(Mat &inputImg, Mat &outputImg)
     cout << "error computing sliency" << endl;
   }
   normalize(outputImg,outputImg,0,255,NORM_MINMAX,0,noArray());
-
-  waitKey(0);
   /* Find average value */
   double li = 0;
   double a = 0;
@@ -335,7 +336,7 @@ void cleanUpBinary(Mat &binaryImg)
   contours.clear();
   hierarchy.clear();
   findContours(binaryImg.clone(),contours,hierarchy,RETR_TREE,CHAIN_APPROX_SIMPLE,Point());
-  cout << contours.size() << endl;
+
   for(int i = 0; i< contours.size(); i++)
   {
     double tmpArea =  contourArea(contours[i]);
