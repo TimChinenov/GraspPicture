@@ -42,6 +42,7 @@ Grasp::Grasp(const cv::Mat & binImg)
   perimeter = arcLength(polygon,true);
 }
 
+//function displays the contour after being simplified to polygons
 void Grasp::displayPolygon()
 {
   Mat result = Mat::zeros(rows,cols,CV_8UC1);
@@ -54,9 +55,17 @@ void Grasp::displayPolygon()
   imshow("polyon",result);
 }
 
-void generateGrasp()
+void Grasp::generateGrasp()
 {
+  vector<Line> vectContour;
   /* convert each set off coordinates into a line*/
-  
+  for(int i = 1; i < polygon.size(); i++)
+  {
+    Line tmpLine(polygon[i-1],polygon[i]);
+    vectContour.push_back(tmpLine);
+  }
+  /* Make a contour from the last to the first point */
+  Line last(polygon[polygon.size()-1],polygon[0]);
+  vectContour.push_back(last);
 
 }

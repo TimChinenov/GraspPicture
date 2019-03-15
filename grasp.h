@@ -4,7 +4,6 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/ximgproc/slic.hpp>
 #include <opencv2/core/cvstd.hpp>
 #include <opencv2/core/utility.hpp>
 #include <opencv2/ximgproc.hpp>
@@ -14,6 +13,8 @@
 #include <vector>
 #include <map>
 #include <string>
+
+#include "line.h"
 
 using namespace std;
 using namespace cv;
@@ -29,6 +30,7 @@ class Grasp
     Grasp();
     Grasp(const cv::Mat & binImg);
     void displayPolygon();
+    void generateGrasp();
 };
 
 
