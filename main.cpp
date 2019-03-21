@@ -164,8 +164,8 @@ int main( int argc, char* argv[] ) {
   imshow("two",binMask);
   // namedWindow("three", WINDOW_NORMAL);
   // imshow("three",salImg);
-  // namedWindow("five", WINDOW_NORMAL);
-  // imshow("five",spxlSal);
+  namedWindow("five", WINDOW_NORMAL);
+  imshow("five",spxlSal);
   namedWindow("four", WINDOW_NORMAL);
   imshow("four",spxlMod);
 

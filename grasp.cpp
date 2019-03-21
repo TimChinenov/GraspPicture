@@ -67,5 +67,4 @@ void Grasp::generateGrasp()
   /* Make a contour from the last to the first point */
   Line last(polygon[polygon.size()-1],polygon[0]);
   vectContour.push_back(last);
-
 }
