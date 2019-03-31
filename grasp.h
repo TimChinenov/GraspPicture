@@ -24,13 +24,20 @@ class Grasp
   private:
     vector<Point> polygon;
     double perimeter;
+    Point centroid;
+    //center of mass
+    double CoM;
     int rows;
     int cols;
+
+    //private functions
+    void findCentroid();
   public:
     Grasp();
     Grasp(const cv::Mat & binImg);
     void displayPolygon();
     void generateGrasp();
+    void descretizePolygon();
 };
 
 

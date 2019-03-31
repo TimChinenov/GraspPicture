@@ -2,6 +2,7 @@
 using namespace std;
 using namespace cv;
 
+
 Grasp::Grasp(){}
 
 Grasp::Grasp(const cv::Mat & binImg)
@@ -34,12 +35,14 @@ Grasp::Grasp(const cv::Mat & binImg)
   }
 
   //polygonize the largest contour
-  cerr << tracker->size() << endl;
   approxPolyDP(*tracker,polygon,5,true);
-  cerr << polygon.size() << endl;
 
   //calculate perimeter of contour
   perimeter = arcLength(polygon,true);
+  //find centroid of contour
+  findCentroid();
+
+
 }
 
 //function displays the contour after being simplified to polygons
@@ -50,21 +53,35 @@ void Grasp::displayPolygon()
   vector<vector<Point>> tmpCont;
   tmpCont.push_back(polygon);
   drawContours(result,tmpCont,0,Scalar(255),1,LINE_4,noArray(),8,Point());
-
+  // fillPoly(result,tmpCont,Scalar(255));
   namedWindow("polyon",WINDOW_NORMAL);
   imshow("polyon",result);
 }
 
 void Grasp::generateGrasp()
 {
-  vector<Line> vectContour;
-  /* convert each set off coordinates into a line*/
-  for(int i = 1; i < polygon.size(); i++)
-  {
-    Line tmpLine(polygon[i-1],polygon[i]);
-    vectContour.push_back(tmpLine);
-  }
-  /* Make a contour from the last to the first point */
-  Line last(polygon[polygon.size()-1],polygon[0]);
-  vectContour.push_back(last);
+}
+//
+// void descretizePolygon(vector<Point> & poly,int resolution)
+// {
+//
+// }
+
+void Grasp::findCentroid()
+{
+  //get moments of polygon
+  Moments mmnts = moments(polygon);
+
+  //calculate centroid of polygon
+  int cx = int(mmnts.m10/mmnts.m00);
+  int cy = int(mmnts.m01/mmnts.m00);
+
+  //assign cx and cy to array
+  centroid.x = cx;
+  centroid.y = cy;
+}
+
+void Grasp::descretizePolygon()
+{
+  
 }
