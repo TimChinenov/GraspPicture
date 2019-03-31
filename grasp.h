@@ -22,13 +22,20 @@ using namespace cv;
 class Grasp
 {
   private:
+    //polygonized curve
     vector<Point> polygon;
+    //descretized Polygon
+    vector<Point> Poly_D;
+    //perimater of polygonized curve
     double perimeter;
+    //centroid of the polygonized curve
     Point centroid;
-    //center of mass
+    //center of mass of polygonized curve
     double CoM;
+    //dimensions of original image
     int rows;
     int cols;
+
 
     //private functions
     void findCentroid();

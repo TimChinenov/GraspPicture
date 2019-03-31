@@ -61,11 +61,18 @@ void Grasp::displayPolygon()
 void Grasp::generateGrasp()
 {
 }
-//
-// void descretizePolygon(vector<Point> & poly,int resolution)
-// {
-//
-// }
+
+// Function finds a discrete version of the polygon.
+// The value of resolution needs to be a value between 0-1 exclusive,
+// representing the fraction of pixels that are kept.
+void Grasp::descretizePolygon(double resolution)
+{
+  if (resolution >= 1 || resolution <= 0)
+  {
+    throw "incorrect resolution value, must be 0 < resolution < 1";
+  }
+  
+}
 
 void Grasp::findCentroid()
 {
@@ -79,9 +86,4 @@ void Grasp::findCentroid()
   //assign cx and cy to array
   centroid.x = cx;
   centroid.y = cy;
-}
-
-void Grasp::descretizePolygon()
-{
-  
 }
