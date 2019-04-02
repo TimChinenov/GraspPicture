@@ -13,13 +13,13 @@ class Line
 {
   private:
   public:
-    Point uVec;
-    Point startPoint;
+    Point2d uVec;
+    Point2d startPoint;
     double mag;
 
     Line();
-    Line(Point pos1, Point pos2);
-    Point getPerpendicular();// returns perpendicular unit vector
+    Line(Point2d pos1, Point2d pos2);
+    Point2d getPerpendicular();// returns perpendicular unit vector
     double getAngleWith(double l1[2]);//finds angle between self and l1;
 };
 

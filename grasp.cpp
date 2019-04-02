@@ -109,18 +109,17 @@ void Grasp::descretizePolygon(double resolution)
     Line tmpLine = Line(polygon[cnt-1],polygon[cnt]);
 
     // Add the first point to the descritized shape
-    Point startPoint = Point(polygon[cnt-1]);
+    Point2d startPoint = Point(polygon[cnt-1]);
     Poly_D.push_back(startPoint);
 
     // Generate numPoints number of points between the two ends
     for (int cp = 1; cp <= numPoints; cp++)
     {
       // Calculate next point
-      Point nxtPoint = startPoint + tmpLine.uVec * cp;
-      cout << startPoint + tmpLine.uVec * cp <<endl;
-      nxtPoint.x = (nxtPoint.x);
-      nxtPoint.y = (nxtPoint.y);
-      
+      Point2d nxtPoint = startPoint + (tmpLine.uVec * cp / resolution);
+      // nxtPoint.x = int(nxtPoint.x);
+      // nxtPoint.y = int(nxtPoint.y);
+
       // Add next point to descretized polygon list
       Poly_D.push_back(nxtPoint);
     }

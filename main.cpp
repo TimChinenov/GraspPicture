@@ -122,7 +122,7 @@ int main( int argc, char* argv[] ) {
   /* Make Grasp Object */
   Grasp grasp(binMask);
   grasp.displayPolygon();
-  grasp.descretizePolygon(0.1);
+  grasp.descretizePolygon(0.5);
   grasp.displayDescrtizedPolygon();
 
   /* place super pixel mask on image*/
