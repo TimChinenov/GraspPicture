@@ -43,8 +43,11 @@ class Grasp
     Grasp();
     Grasp(const cv::Mat & binImg);
     void displayPolygon();
+    void displayDescrtizedPolygon();
     void generateGrasp();
     void descretizePolygon();
+    void descretizePolygon(double resolution);
+
 };
 
 

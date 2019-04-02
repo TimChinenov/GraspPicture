@@ -12,13 +12,14 @@ using namespace cv;
 class Line
 {
   private:
-    double uVec[2];
+  public:
+    Point uVec;
     Point startPoint;
     double mag;
-  public:
+
     Line();
     Line(Point pos1, Point pos2);
-    double* getPerpendicular();// returns perpendicular unit vector
+    Point getPerpendicular();// returns perpendicular unit vector
     double getAngleWith(double l1[2]);//finds angle between self and l1;
 };
 

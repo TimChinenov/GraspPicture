@@ -45,21 +45,39 @@ Grasp::Grasp(const cv::Mat & binImg)
 
 }
 
-//function displays the contour after being simplified to polygons
+void Grasp::generateGrasp()
+{
+}
+
+// Function displays the contour after being simplified to polygons
 void Grasp::displayPolygon()
 {
   Mat result = Mat::zeros(rows,cols,CV_8UC1);
-  cerr << polygon.size() << endl;
   vector<vector<Point>> tmpCont;
   tmpCont.push_back(polygon);
   drawContours(result,tmpCont,0,Scalar(255),1,LINE_4,noArray(),8,Point());
   // fillPoly(result,tmpCont,Scalar(255));
-  namedWindow("polyon",WINDOW_NORMAL);
-  imshow("polyon",result);
+  namedWindow("polygon",WINDOW_NORMAL);
+  imshow("polygon",result);
 }
 
-void Grasp::generateGrasp()
+void Grasp::displayDescrtizedPolygon()
 {
+  // If there are not enough discrete points, throw an error
+  if (Poly_D.size() == 0)
+  {
+    throw "Polygon was not descretized or descretization failed";
+  }
+  // Make a blank image
+  Mat result = Mat::zeros(rows,cols,CV_8UC1);
+
+  // Iterate through polygon and plot its points
+  for(int cnt = 0; cnt < Poly_D.size(); cnt++)
+  {
+      result.at<int>(Poly_D[cnt]) = 255;
+  }
+  namedWindow("discrete polygon",WINDOW_NORMAL);
+  imshow("discrete polygon",result);
 }
 
 // Function finds a discrete version of the polygon.
@@ -71,7 +89,42 @@ void Grasp::descretizePolygon(double resolution)
   {
     throw "incorrect resolution value, must be 0 < resolution < 1";
   }
-  
+
+  // Go through each point in the contour
+  int cnt = 1;
+  for (; cnt != polygon.size(); cnt++)
+  {
+    // Find distance between the current and previous points
+    int x2 = polygon[cnt].x;
+    int y2 = polygon[cnt].y;
+    int x1 = polygon[cnt-1].x;
+    int y1 = polygon[cnt-1].y;
+    double distance = sqrt(pow(x2 - x1,2) + pow(y2 - y1,2));
+
+    // Determine number points to generate
+    // Subtract one to account for starting point
+    int numPoints = int(distance * resolution) - 1;
+
+    // Create a line between the two points
+    Line tmpLine = Line(polygon[cnt-1],polygon[cnt]);
+
+    // Add the first point to the descritized shape
+    Point startPoint = Point(polygon[cnt-1]);
+    Poly_D.push_back(startPoint);
+
+    // Generate numPoints number of points between the two ends
+    for (int cp = 1; cp <= numPoints; cp++)
+    {
+      // Calculate next point
+      Point nxtPoint = startPoint + tmpLine.uVec * cp;
+      cout << startPoint + tmpLine.uVec * cp <<endl;
+      nxtPoint.x = (nxtPoint.x);
+      nxtPoint.y = (nxtPoint.y);
+      
+      // Add next point to descretized polygon list
+      Poly_D.push_back(nxtPoint);
+    }
+  }
 }
 
 void Grasp::findCentroid()

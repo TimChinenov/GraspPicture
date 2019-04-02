@@ -1,6 +1,4 @@
-//g++ -std=c++11 main.cpp `pkg-config --libs --cflags opencv` -o main
-
-
+//g++ -std=c++11 *.cpp `pkg-config --libs --cflags opencv` -o main
 #include <opencv2/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -124,6 +122,8 @@ int main( int argc, char* argv[] ) {
   /* Make Grasp Object */
   Grasp grasp(binMask);
   grasp.displayPolygon();
+  grasp.descretizePolygon(0.1);
+  grasp.displayDescrtizedPolygon();
 
   /* place super pixel mask on image*/
   Mat spxlMod = image.clone();
