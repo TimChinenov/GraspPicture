@@ -56,34 +56,33 @@ void Grasp::displayPolygon()
   vector<vector<Point>> tmpCont;
   tmpCont.push_back(polygon);
   drawContours(result,tmpCont,0,Scalar(255),1,LINE_4,noArray(),8,Point());
-  // fillPoly(result,tmpCont,Scalar(255));
   namedWindow("polygon",WINDOW_NORMAL);
   imshow("polygon",result);
 }
 
-void Grasp::displayDescrtizedPolygon()
+void Grasp::displayDiscretizedPolygon()
 {
   // If there are not enough discrete points, throw an error
   if (Poly_D.size() == 0)
   {
-    throw "Polygon was not descretized or descretization failed";
+    throw "Polygon was not discretized or descretization failed";
   }
   // Make a blank image
-  Mat result = Mat::zeros(rows,cols,CV_8UC1);
+  Mat discreteImg = Mat::zeros(rows,cols,CV_8UC1);
 
   // Iterate through polygon and plot its points
   for(int cnt = 0; cnt < Poly_D.size(); cnt++)
   {
-      result.at<int>(Poly_D[cnt]) = 255;
+      discreteImg.at<char>(Poly_D[cnt].y,Poly_D[cnt].x) = 255;
   }
   namedWindow("discrete polygon",WINDOW_NORMAL);
-  imshow("discrete polygon",result);
+  imshow("discrete polygon",discreteImg);
 }
 
 // Function finds a discrete version of the polygon.
 // The value of resolution needs to be a value between 0-1 exclusive,
 // representing the fraction of pixels that are kept.
-void Grasp::descretizePolygon(double resolution)
+void Grasp::discretizePolygon(double resolution)
 {
   if (resolution >= 1 || resolution <= 0)
   {
@@ -91,25 +90,36 @@ void Grasp::descretizePolygon(double resolution)
   }
 
   // Go through each point in the contour
-  int cnt = 1;
+  int cnt = 0;
   for (; cnt != polygon.size(); cnt++)
   {
-    // Find distance between the current and previous points
-    int x2 = polygon[cnt].x;
-    int y2 = polygon[cnt].y;
-    int x1 = polygon[cnt-1].x;
-    int y1 = polygon[cnt-1].y;
+    int x2, y2, x1 , y1;
+    if (cnt == 0)
+    {
+      x2 = polygon[cnt].x;
+      y2 = polygon[cnt].y;
+      x1 = polygon[polygon.size() - 1].x;
+      y1 = polygon[polygon.size() - 1].y;
+    }
+    else
+    {
+      // Find distance between the current and previous points
+      x2 = polygon[cnt].x;
+      y2 = polygon[cnt].y;
+      x1 = polygon[cnt-1].x;
+      y1 = polygon[cnt-1].y;
+    }
     double distance = sqrt(pow(x2 - x1,2) + pow(y2 - y1,2));
 
     // Determine number points to generate
     // Subtract one to account for starting point
-    int numPoints = int(distance * resolution) - 1;
+    int numPoints = round(distance * resolution) - 1;
 
     // Create a line between the two points
-    Line tmpLine = Line(polygon[cnt-1],polygon[cnt]);
+    Line tmpLine = Line(Point(x1, y1),Point(x2, y2));
 
     // Add the first point to the descritized shape
-    Point2d startPoint = Point(polygon[cnt-1]);
+    Point2d startPoint = Point(x1, y1);
     Poly_D.push_back(startPoint);
 
     // Generate numPoints number of points between the two ends
@@ -117,10 +127,11 @@ void Grasp::descretizePolygon(double resolution)
     {
       // Calculate next point
       Point2d nxtPoint = startPoint + (tmpLine.uVec * cp / resolution);
-      // nxtPoint.x = int(nxtPoint.x);
-      // nxtPoint.y = int(nxtPoint.y);
 
-      // Add next point to descretized polygon list
+      nxtPoint.x = round(nxtPoint.x);
+      nxtPoint.y = round(nxtPoint.y);
+
+      // Add next point to discretized polygon list
       Poly_D.push_back(nxtPoint);
     }
   }
