@@ -26,6 +26,9 @@ class Grasp
     vector<Point> polygon;
     //descretized Polygon
     vector<Point> Poly_D;
+    // holds the normal unit vectors of index associated
+    // discrete points
+    vector<Point2d> normals_D;
     //perimater of polygonized curve
     double perimeter;
     //centroid of the polygonized curve

@@ -2,7 +2,10 @@
 using namespace std;
 using namespace cv;
 
-Line::Line(){}
+Line::Line()
+{
+  corner = true;
+}
 
 Line::Line(Point2d pos1, Point2d pos2)
 {
@@ -16,6 +19,8 @@ Line::Line(Point2d pos1, Point2d pos2)
   //find unit vector for direction
   uVec.x = (pos2.x - pos1.x) / mag;
   uVec.y = (pos2.y - pos1.y) / mag;
+
+  corner = false;
 
 }
 

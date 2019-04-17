@@ -39,9 +39,9 @@ Grasp::Grasp(const cv::Mat & binImg)
 
   //calculate perimeter of contour
   perimeter = arcLength(polygon,true);
+
   //find centroid of contour
   findCentroid();
-
 
 }
 
@@ -122,6 +122,12 @@ void Grasp::discretizePolygon(double resolution)
     Point2d startPoint = Point(x1, y1);
     Poly_D.push_back(startPoint);
 
+    // store "normal" point as corner
+    // unit vector can't have magnitude of more than 1
+    // so the below works
+    Point2d corner = Point(2,2);
+    normals_D.push_back(corner);
+
     // Generate numPoints number of points between the two ends
     for (int cp = 1; cp <= numPoints; cp++)
     {
@@ -133,6 +139,9 @@ void Grasp::discretizePolygon(double resolution)
 
       // Add next point to discretized polygon list
       Poly_D.push_back(nxtPoint);
+
+      // Add normal to vector
+      normals_D.push_back(tmpLine.getPerpendicular());
     }
   }
 }

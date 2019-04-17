@@ -16,6 +16,8 @@ class Line
     Point2d uVec;
     Point2d startPoint;
     double mag;
+    // true if point is a corner, false otherwise
+    bool corner;
 
     Line();
     Line(Point2d pos1, Point2d pos2);
