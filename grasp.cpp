@@ -47,6 +47,7 @@ Grasp::Grasp(const cv::Mat & binImg)
 
 void Grasp::generateGrasp()
 {
+
 }
 
 // Function displays the contour after being simplified to polygons
