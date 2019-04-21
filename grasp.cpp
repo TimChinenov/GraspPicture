@@ -171,10 +171,11 @@ void Grasp::findAntipodalRegions(vector<vector<float>> & regions)
     // points evaluated in current iteration
     Point * pt1;
     Point * pt2;
-
     // respective normals of points
     Point2d op_norm_1;
     Point2d op_norm_2;
+    // this will store the smallest range found
+    float minDist = 2*3.1415;
 
     // make sure to evaluate first and last index of array together
     if (itr == Poly_D.size()-1)
@@ -206,6 +207,27 @@ void Grasp::findAntipodalRegions(vector<vector<float>> & regions)
     // take the inverse of the normals
     op_norm_1 = -1 * op_norm_1;
     op_norm_2 = -1 * op_norm_2;
+
+    // Future Edit: The following might be implementable in a
+    // better way. Need to consider possibilities
+
+    // iterate through each combination of vector pairs
+    for (int vtr = 0; vtr < Poly_D.size(); vtr++)
+    {
+      for (int wtr = 0; wtr < Poly_D.size(); wtr++)
+      {
+        // make sure indexes are not the same
+        if (vtr == wtr || vtr == itr || wtr == itr) continue;
+
+        // get the normal vectors
+        Point2d * norm_v = &normals_D[vtr];
+        Point2d * norm_w = &normals_D[wtr];
+
+        // convert unit vectors to radian angles
+
+
+      }
+    }
 
   }
 }
