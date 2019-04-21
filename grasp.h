@@ -24,6 +24,8 @@ class Grasp
   private:
     //polygonized curve
     vector<Point> polygon;
+    // extent of polygonization
+    float epsilon = 2;
     //descretized Polygon
     vector<Point> Poly_D;
     // holds the normal unit vectors of index associated
@@ -42,6 +44,7 @@ class Grasp
 
     //private functions
     void findCentroid();
+    void findAntipodalRegions(vector<vector<float>> & regions);
   public:
     Grasp();
     Grasp(const cv::Mat & binImg);

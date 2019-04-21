@@ -124,6 +124,7 @@ int main( int argc, char* argv[] ) {
   grasp.displayPolygon();
   grasp.discretizePolygon(0.1);
   grasp.displayDiscretizedPolygon();
+  grasp.generateGrasp();
 
   /* place super pixel mask on image*/
   Mat spxlMod = image.clone();
@@ -162,8 +163,8 @@ int main( int argc, char* argv[] ) {
 
   namedWindow("two", WINDOW_NORMAL);
   imshow("two",binMask);
-  // namedWindow("three", WINDOW_NORMAL);
-  // imshow("three",salImg);
+  namedWindow("three", WINDOW_NORMAL);
+  imshow("three",salImg);
   namedWindow("five", WINDOW_NORMAL);
   imshow("five",spxlSal);
   namedWindow("four", WINDOW_NORMAL);

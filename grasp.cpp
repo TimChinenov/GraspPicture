@@ -35,7 +35,7 @@ Grasp::Grasp(const cv::Mat & binImg)
   }
 
   //polygonize the largest contour
-  approxPolyDP(*tracker,polygon,5,true);
+  approxPolyDP(*tracker,polygon,epsilon,true);
 
   //calculate perimeter of contour
   perimeter = arcLength(polygon,true);
@@ -47,7 +47,10 @@ Grasp::Grasp(const cv::Mat & binImg)
 
 void Grasp::generateGrasp()
 {
-
+  // first we want to determine the h-k space
+  // determine regions of antipodal uncertainty.
+  vector<vector<float>> antipodal_regions;
+  findAntipodalRegions(antipodal_regions);
 }
 
 // Function displays the contour after being simplified to polygons
@@ -159,4 +162,50 @@ void Grasp::findCentroid()
   //assign cx and cy to array
   centroid.x = cx;
   centroid.y = cy;
+}
+
+void Grasp::findAntipodalRegions(vector<vector<float>> & regions)
+{
+  for(int itr = 0; itr < Poly_D.size(); itr++)
+  {
+    // points evaluated in current iteration
+    Point * pt1;
+    Point * pt2;
+
+    // respective normals of points
+    Point2d op_norm_1;
+    Point2d op_norm_2;
+
+    // make sure to evaluate first and last index of array together
+    if (itr == Poly_D.size()-1)
+    {
+      // set points
+      pt1 = &Poly_D[itr];
+      pt2 = &Poly_D[0];
+
+      // set normals
+      op_norm_1 = Point2d(normals_D[itr]);
+      op_norm_2 = Point2d(normals_D[0]);
+    }
+    else
+    {
+      pt1 = &Poly_D[itr];
+      pt2 = &Poly_D[itr+1];
+
+      op_norm_1 = Point2d(normals_D[itr]);
+      op_norm_2 = Point2d(normals_D[itr+1]);
+    }
+
+    // for now, we'll skip vertices
+    if (op_norm_1.x == 2 || op_norm_2.x == 2)
+    {
+      continue;
+    }
+    //////////////////////////////
+
+    // take the inverse of the normals
+    op_norm_1 = -1 * op_norm_1;
+    op_norm_2 = -1 * op_norm_2;
+
+  }
 }
