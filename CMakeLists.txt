@@ -7,9 +7,9 @@ set(CMAKE_BUILD_TYPE Debug)
 
 # force C++11, uncomment the following three lines if you're
 # using OpenCV 4.0 or upper
-#set(CMAKE_CXX_STANDARD 11)
-#set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # OpenCV stuff
 find_package(OpenCV REQUIRED)

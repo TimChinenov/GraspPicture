@@ -24,7 +24,7 @@ using namespace std;
 using namespace cv;
 using namespace saliency;
 
-void getSuperPixels(const Mat &inputImg, Mat &outputImg, Mat &labels, int pixelSize);
+void getSuperPixels(const Mat &inputImg, Mat &outputImg, Mat &labels, int pixelSize, float compactness);
 void getSaliencyMap(Mat &inputImg, Mat &outputImg);
 void binarizeSaliencyMap(const Mat &salMap, const Mat &pxlLabels, Mat &outputImg, double Thold);
 void dilateBinary(const Mat &binaryImg, Mat &dilation, int pixelSize);
@@ -59,8 +59,8 @@ int main( int argc, char* argv[] ) {
   /* get information on the image, height and width */
   int imgH = image.rows;
   int imgW = image.cols;
-  SPXLSIZE = imgH * imgW / argv[2];
-  float compactness = argv[3]
+  SPXLSIZE = imgH * imgW / atoi(argv[2]);
+  float compactness = atof(argv[3]);
 
   /* initialize the binarized image as all black */
   Mat spxlSal = Mat::zeros(imgH,imgW,CV_8UC1);
@@ -357,6 +357,6 @@ void cleanUpBinary(Mat &binaryImg)
   }
   Mat result;
   result = Mat::zeros(binaryImg.rows,binaryImg.cols,CV_8UC1);
-  drawContours(result,contours,coolCont,Scalar(255),CV_FILLED,LINE_4,noArray(),8,Point());
+  drawContours(result,contours,coolCont,Scalar(255),FILLED,LINE_4,noArray(),8,Point());
   binaryImg &= result;
 }
