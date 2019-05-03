@@ -24,13 +24,19 @@ using namespace std;
 using namespace cv;
 using namespace saliency;
 
-void getSuperPixels(const Mat &inputImg, Mat &outputImg, Mat &labels, int pixelSize);
+void getSuperPixels(const Mat &inputImg, Mat &outputImg, Mat &labels, int pixelSize, float compactness);
 void getSaliencyMap(Mat &inputImg, Mat &outputImg);
 void binarizeSaliencyMap(const Mat &salMap, const Mat &pxlLabels, Mat &outputImg, double Thold);
 void dilateBinary(const Mat &binaryImg, Mat &dilation, int pixelSize);
 void cleanUpBinary(Mat &binaryImg);
 
 int main( int argc, char* argv[] ) {
+  if(argc != 4)
+  {
+    cout << "Usage: ./main [input image path] [number of superpixel] [compactness]" << endl;
+    return 1;
+  }
+
   Mat image; //variable holds main image
   Mat BlurImage; //Image holds alterations
   Mat gCutImg; //super pixel image
@@ -44,7 +50,7 @@ int main( int argc, char* argv[] ) {
   String file = argv[1];//grab image from command line
 
   /* parameters of the algorithm */
-  int SPXLSIZE = 15; //average super pixel size
+  int SPXLSIZE; //average super pixel size
   double Tvalue = 0.25; //threshold valie
 
   //intialize the primary image
@@ -53,6 +59,8 @@ int main( int argc, char* argv[] ) {
   /* get information on the image, height and width */
   int imgH = image.rows;
   int imgW = image.cols;
+  SPXLSIZE = imgH * imgW / atoi(argv[2]);
+  float compactness = atof(argv[3]);
 
   /* initialize the binarized image as all black */
   Mat spxlSal = Mat::zeros(imgH,imgW,CV_8UC1);
@@ -61,7 +69,7 @@ int main( int argc, char* argv[] ) {
   GaussianBlur(image,BlurImage,Size(5,5),0,0);
 
   /* Construct superpixel and generate mask*/
-  getSuperPixels(image, spxlImg, spxlLabel, SPXLSIZE);
+  getSuperPixels(image, spxlImg, spxlLabel, SPXLSIZE, compactness);
 
   /* Compute the saliency map for the image using OpenCV */
   getSaliencyMap(image, salImg);
@@ -180,7 +188,7 @@ int main( int argc, char* argv[] ) {
 /* Following finds the superpixels and its labels
    in image inputImg and and places them in outputImg and labels.
    the average superpixel size will be set to pixelSize*/
-void getSuperPixels(const Mat & inputImg, Mat & outputImg, Mat & labels, int pixelSize)
+void getSuperPixels(const Mat & inputImg, Mat & outputImg, Mat & labels, int pixelSize, float compactness)
 {
   /* Blur the image with 3x3 Gaussian */
   GaussianBlur(inputImg,outputImg,Size(5,5),0,0);
@@ -190,7 +198,7 @@ void getSuperPixels(const Mat & inputImg, Mat & outputImg, Mat & labels, int pix
 
   /* Construct superpixel and generate mask*/
   Ptr<ximgproc::SuperpixelSLIC> ptr =
-                     ximgproc::createSuperpixelSLIC(outputImg,100,pixelSize,75.0f);
+                     ximgproc::createSuperpixelSLIC(outputImg,100,pixelSize,compactness);
 
   ptr->iterate(10);
   ptr->enforceLabelConnectivity(10); //reduces small fragments
@@ -349,6 +357,6 @@ void cleanUpBinary(Mat &binaryImg)
   }
   Mat result;
   result = Mat::zeros(binaryImg.rows,binaryImg.cols,CV_8UC1);
-  drawContours(result,contours,coolCont,Scalar(255),CV_FILLED,LINE_4,noArray(),8,Point());
+  drawContours(result,contours,coolCont,Scalar(255),FILLED,LINE_4,noArray(),8,Point());
   binaryImg &= result;
 }
